@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Persona Anima Discovery</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+:root {
+  --bg1: #20002c;
+  --bg2: #400048;
+  --panel: rgba(60, 0, 85, 0.9);
+  --text: #f8ecff;
+  --muted: #e0caff;
+  --accent: #b46bff;
+  --accent-2: #7b2ff7;
+  --input-bg: rgba(255, 255, 255, 0.07);
+}
+
+/* Animated soft gradient background */
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at top left, var(--bg2), var(--bg1));
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  animation: glowShift 8s ease-in-out infinite alternate;
+}
+@keyframes glowShift {
+  0% { background: radial-gradient(circle at 25% 25%, #3a005f, #20002c); }
+  100% { background: radial-gradient(circle at 75% 75%, #20002c, #3a005f); }
+}
+
+.card {
+  width: 850px;
+  max-width: 95%;
+  background: var(--panel);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 0 60px rgba(180, 100, 255, 0.15), 0 0 20px rgba(180, 100, 255, 0.1);
+  text-align: center;
+  position: relative;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  opacity: 0;
+  transform: translateY(20px);
+}
+.card.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition: 0.8s ease all;
+}
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 60px rgba(180, 100, 255, 0.25);
+}
+
+h1, h2, h3 {
+  margin-top: 0;
+  letter-spacing: 1px;
+}
+p { color: var(--muted); }
+
+input {
+  width: 80%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  margin: 8px 0;
+  background: var(--input-bg);
+  color: white;
+  text-align: center;
+  transition: all 0.3s;
+}
+input:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(180, 100, 255, 0.4);
+}
+
+/* Dropdown styling (choices) */
+select {
+  width: 80%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  margin: 8px 0;
+  background: rgba(255, 255, 255, 0.9);
+  color: black; /* BLACK TEXT FOR CHOICES */
+  text-align: center;
+  font-weight: 500;
+  transition: all 0.4s ease;
+  box-shadow: 0 0 10px rgba(180, 100, 255, 0.15);
+}
+select:focus {
+  outline: none;
+  box-shadow: 0 0 20px rgba(180, 100, 255, 0.4), 0 0 30px rgba(123, 47, 247, 0.3);
+}
+select:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 25px rgba(180, 100, 255, 0.45), 0 0 40px rgba(123, 47, 247, 0.35);
+}
+
+/* Button styling */
+button {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+button:hover {
+  transform: scale(1.07);
+  box-shadow: 0 0 20px rgba(180, 100, 255, 0.4);
+}
+button.alt {
+  background: transparent;
+  border: 1px solid rgba(180, 100, 255, 0.3);
+}
+
+.hidden { display: none; }
+
+.result-box {
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 15px;
+  color: var(--muted);
+}
+
+/* Login form alignment */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+.btn-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+.glow-btn {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.4s ease;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+}
+.glow-btn:hover {
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.7), 0 0 40px rgba(126, 34, 206, 0.5);
+  transform: scale(1.06);
+}
+
+/* Fade transitions between pages */
+.fade-enter { opacity: 0; transform: translateY(20px); }
+.fade-enter-active {
+  opacity: 1; transform: translateY(0);
+  transition: opacity 0.6s, transform 0.6s;
+}
+
+/* Admin table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+th, td {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background: rgba(255, 255, 255, 0.1);
+}
+.note { font-size: 13px; color: #cdb7ff; margin-top: 10px; }
+</style>
+</head>
+<body>
+  <div class="card show" id="mainCard">
+    <!-- PAGE 1 -->
+    <div id="pageIntro">
+      <h1>Persona Anima Discovery</h1>
+      <p>Discover your inner personality through the animals that come to mind.</p>
+      <button id="toLogin">Click Here to Begin</button>
+    </div>
+
+    <!-- PAGE 2 -->
+    <div id="pageLogin" class="hidden center">
+      <h2>Login</h2>
+      <p>Enter your details to start your personality journey.</p>
+
+      <div class="login-form">
+        <input id="fname" type="text" placeholder="First Name">
+        <input id="lname" type="text" placeholder="Last Name">
+        <input id="email" type="email" placeholder="Email Address">
+        <div class="btn-container">
+          <button id="startBtn" class="glow-btn">Submit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 3 -->
+    <div id="pageQuestions" class="hidden">
+      <h2>Animal Personality Questions</h2>
+      <div id="questionArea"></div>
+      <button id="qBack" class="alt">Back</button>
+      <button id="qNext">Next</button>
+    </div>
+
+    <!-- PAGE 4 -->
+    <div id="pageResult" class="hidden">
+      <h2>Your Personality Result</h2>
+      <div id="resultContent" class="result-box"></div>
+      <p>Thank you for participating in <strong>Persona Anima Discovery</strong>.</p>
+      <div class="note">© 2025 Persona Anima Discovery — All rights reserved.</div>
+      <p style="margin-top:10px;">
+        <span id="adminLink" style="cursor:pointer;color:var(--accent)">Admin Login</span>
+      </p>
+    </div>
+
+    <!-- PAGE 5 -->
+    <div id="pageAdminLogin" class="hidden">
+      <h2>Admin Access</h2>
+      <p>Enter admin password to view stored responses.</p>
+      <input id="adminPass" type="password" placeholder="Admin Password">
+      <button id="adminSubmit">Login</button>
+      <button id="adminCancel" class="alt">Cancel</button>
+    </div>
+
+    <div id="pageAdminPanel" class="hidden">
+      <h2>Admin Records</h2>
+      <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Choice 1</th><th>Choice 2</th><th>Choice 3</th><th>Date</th></tr></thead>
+        <tbody id="adminTable"></tbody>
+      </table>
+      <button id="clearBtn" class="alt">Clear Records</button>
+      <button id="adminExit">Exit</button>
+    </div>
+  </div>
+
+<script>
+let user = { fname:'', lname:'', email:'', answers:[] };
+let qIndex = 0;
+const questions = [
+  "What is the first animal that comes to your mind?",
+  "What is the second animal that comes to your mind?",
+  "What is the third animal that comes to your mind?"
+];
+const animals = ["Lion","Tiger","Dog","Cat","Elephant","Rabbit","Horse","Dolphin","Wolf","Fox",
+  "Eagle","Owl","Bear","Monkey","Deer","Turtle","Peacock","Snake","Frog","Leopard",
+  "Giraffe","Sheep","Goat","Pig","Cow","Bee","Butterfly","Crocodile","Parrot","Duck",
+  "Penguin","Whale","Kangaroo","Swan","Cheetah","Hawk","Bat","Mouse","Zebra","Camel"
+];
+const meanings = {
+  "Lion": "Lion — You demonstrate leadership, confidence, and a capacity to take responsibility under pressure. You are motivated by respect and tend to protect those who depend on you. In stressful situations you rely on decisive action and a clear sense of purpose.",
+  "Tiger": "Tiger — You are driven, ambitious, and unafraid to pursue high-stakes goals. You act with intensity and often prefer direct action over prolonged planning. You can be fiercely independent and expect the same strength of purpose from those around you.",
+  "Dog": "Dog — You value loyalty, reliability, and clear bonds with others. You are supportive in relationships and take commitments seriously. You often provide emotional stability to friends and family and respond best to reciprocal trust.",
+  "Cat": "Cat — Independence and self-sufficiency are core to who you are. You observe closely before acting and prefer discretion to attention. You are adaptable and resourceful, comfortable working alone when necessary and forging deep, selective connections.",
+  "Elephant": "Elephant — You show long-term thinking, patience, and strong memory for important details. You tend to be emotionally steady, empathetic, and protective, often serving as a calm anchor in turbulent times. People seek your counsel for difficult choices.",
+  "Rabbit": "Rabbit — You are sensitive, cautious, and considerate of others’ feelings. You prefer stable, peaceful environments and put effort into creating comfort for yourself and those close to you. You may avoid unnecessary conflict, choosing diplomacy over confrontation.",
+  "Horse": "Horse — You are energetic, independent, and appreciate freedom to pursue your interests. You do well with physical or creative challenges that allow movement and expression. Your enthusiasm is contagious, and you perform best when trusted with autonomy.",
+  "Dolphin": "Dolphin — You combine intellect with sociability; you enjoy both mental stimulation and cooperative interaction. You are communicative, playful, and skilled at reading social dynamics. Your empathy and curiosity make you an engaging collaborator.",
+  "Wolf": "Wolf — You balance independence with a strong sense of group loyalty. You perform well within teams, especially when roles are clear and trust is present. Strategic thinking and commitment to shared goals are hallmarks of your approach.",
+  "Fox": "Fox — You are adaptable, clever, and skilled at finding practical solutions to complex problems. You often take unconventional approaches and are quick to pivot when circumstances change. Your resourcefulness makes you effective in uncertain situations.",
+  "Eagle": "Eagle — You are future-oriented, decisive, and value clarity of purpose. You prefer to maintain perspective and make decisions based on an understanding of larger patterns. You thrive in roles that require strategic oversight and independent judgment.",
+  "Owl": "Owl — You are thoughtful, analytical, and drawn to learning and reflection. You tend to process information deeply and offer measured, well-reasoned advice. Introspection and careful planning are strengths you rely on regularly.",
+  "Bear": "Bear — You are reliable, strong, and protective. You shoulder responsibilities willingly and are often seen as a dependable presence. While generally steady, you can be formidable when defending your principles or loved ones.",
+  "Monkey": "Monkey — You are quick-witted, curious, and versatile. You enjoy learning by doing and thrive in lively environments. Your flexibility and problem-solving instincts help you adapt to new situations with inventiveness.",
+  "Deer": "Deer — You are gentle, attentive, and sensitive to atmosphere and relationships. You often act with kindness and avoid unnecessary confrontation. Your empathy and calm demeanor help create comfortable, trusting spaces.",
+  "Turtle": "Turtle — You favor steady, incremental progress and value long-term stability. You are patient, resilient, and practical, preferring reliable routines over impulsive risks. Your persistence and careful planning lead to durable results.",
+  "Peacock": "Peacock — You are expressive, confident, and comfortable being noticed. You use creativity and style to communicate identity and attract attention. While you enjoy recognition, you also invest in cultivating unique personal expression.",
+  "Snake": "Snake — You are perceptive, strategic, and comfortable with transformation. You sense underlying motivations and use insight to manage change thoughtfully. Your approach is often subtle, preferring calculated moves to overt confrontation.",
+  "Frog": "Frog — You are responsive, emotionally aware, and comfortable with adaptation. You turn challenges into opportunities for growth and renewal, often undergoing meaningful personal change. Your sensitivity helps you navigate shifting circumstances.",
+  "Leopard": "Leopard — You combine speed, precision, and independence. You perform best when quick decision-making and self-reliance are required. Your preference for autonomy enables you to pursue focused objectives with efficiency.",
+  "Giraffe": "Giraffe — You maintain perspective and approach situations with calm observation. You see long-term possibilities that others overlook and gently guide people with a composed presence. Diplomacy and thoughtful insights define your leadership style.",
+  "Sheep": "Sheep — You value community, harmony, and steady cooperation. You are often cooperative and supportive, contributing to group stability. You respond well to clear expectations and environments that emphasize mutual care.",
+  "Goat": "Goat — You are hardworking, practical, and persistent in the face of challenges. You steadily pursue objectives, often finding creative ways to navigate difficult terrain. Your pragmatic resilience helps you meet long-term goals.",
+  "Pig": "Pig — You are warm, generous, and grounded in everyday pleasures. You value close relationships and comfortable stability, often sharing resources and kindness with others. Your straightforward nature engenders trust.",
+  "Cow": "Cow — You are nurturing, dependable, and oriented toward sustaining others. You provide steady support and practical care, often putting community or family needs first. Reliability and patience are central to your character.",
+  "Bee": "Bee — You are industrious, organized, and oriented toward collective outcomes. You contribute effectively within systems and understand the value of coordinated effort. Your diligence and discipline create tangible results for the group.",
+  "Butterfly": "Butterfly — You are open to change, expressive, and attuned to personal development. You experience life as a series of transformations, often emerging with renewed perspectives. Your sensitivity and creativity invite others to evolve alongside you.",
+  "Crocodile": "Crocodile — You are patient, pragmatic, and capable of focused intensity when necessary. You wait for opportune moments and act decisively with considerable strength. Your strategic patience is a distinctive asset in challenging situations.",
+  "Parrot": "Parrot — You are communicative, social, and adept at learning through interaction. You enjoy exchange of ideas and often enliven group conversation. Your expressiveness and quick learning ability allow you to connect broadly with others.",
+  "Duck": "Duck — You adapt easily to differing contexts and maintain composure across environments. You may appear tranquil on the surface while working hard beneath it. Your flexibility and calm demeanor make transitions seem smoother than they are.",
+  "Penguin": "Penguin — You value tight-knit community and cooperative effort. You are loyal to your group, practical in approach, and display warmth and humor in shared struggles. You balance commitment with a grounded sense of realism.",
+  "Whale": "Whale — You are reflective, emotionally deep, and often concerned with meaning and context. You bring gravitas and empathy to relationships and prefer connections that allow depth and longevity. Your perspective is broad and patient.",
+  "Kangaroo": "Kangaroo — You combine forward momentum with protective responsibility. You move toward goals with steady energy while tending to important obligations. Your practical optimism and capacity to adapt underpin consistent progress.",
+  "Swan": "Swan — You present composed elegance and value harmony in relationships. You prefer balanced partnerships and often show grace under pressure. Beneath the calm exterior you feel emotions deeply and invest in meaningful bonds.",
+  "Cheetah": "Cheetah — You excel at focused, high-speed effort and rapid problem-solving. You are most effective in short, intense bursts of concentration where timing and precision matter. Your agility and decisiveness help you seize fleeting opportunities.",
+  "Hawk": "Hawk — You act with clarity and sharp perception, noticing details others miss. You are comfortable making quick, informed decisions and value independence. Your alertness and strategic focus guide you toward effective outcomes.",
+  "Bat": "Bat — You use unconventional perception and adapt to situations others find difficult. Your ability to navigate uncertainty and rely on intuition allows you to access resources and possibilities unseen by others. You often thrive in less-structured contexts.",
+  "Mouse": "Mouse — You are attentive to detail, resourceful with limited means, and quietly persistent. You notice small things that others overlook and apply steady effort to grow opportunities incrementally. Your understated diligence often yields reliable results.",
+  "Zebra": "Zebra — You balance individuality with group belonging, maintaining personal integrity while cooperating. You stand out but also understand the value of a supportive community. Your authenticity and social adaptability make you memorable.",
+  "Camel": "Camel — You have endurance, practicality, and a capacity to manage scarce resources effectively. You plan for sustainability and can carry heavy responsibilities over long periods. Your long-term resilience is a core strength."
+
+};
+
+const pages = ["pageIntro","pageLogin","pageQuestions","pageResult","pageAdminLogin","pageAdminPanel"];
+function show(id){
+  pages.forEach(p=>{
+    const el=document.getElementById(p);
+    if(p===id){ el.classList.remove("hidden"); el.classList.add("fade-enter"); setTimeout(()=>el.classList.remove("fade-enter"),10); }
+    else el.classList.add("hidden");
+  });
+}
+
+document.getElementById("toLogin").onclick=()=>show("pageLogin");
+
+document.getElementById("startBtn").onclick=()=>{
+  const f=document.getElementById("fname").value.trim();
+  const l=document.getElementById("lname").value.trim();
+  const e=document.getElementById("email").value.trim();
+  if(!f||!l||!e){ alert("Please fill in all fields."); return; }
+  user={fname:f,lname:l,email:e,answers:[]};
+  qIndex=0; buildQuestion(); show("pageQuestions");
+};
+
+function buildQuestion(){
+  const q=document.getElementById("questionArea");
+  q.innerHTML=`<h3>${questions[qIndex]}</h3>`;
+  const sel=document.createElement("select");
+  animals.forEach(a=>{
+    const opt=document.createElement("option");
+    opt.value=a;
+    opt.text=a;
+    sel.appendChild(opt);
+  });
+  if(user.answers[qIndex]) sel.value=user.answers[qIndex];
+  q.appendChild(sel);
+
+  document.getElementById("qBack").disabled=(qIndex===0);
+  document.getElementById("qNext").textContent=(qIndex===2?"Finish":"Next");
+  document.getElementById("qNext").onclick=()=>{
+    user.answers[qIndex]=sel.value;
+    if(qIndex<2){qIndex++; buildQuestion();}
+    else {saveResult(); showResult();}
+  };
+  document.getElementById("qBack").onclick=()=>{ if(qIndex>0){qIndex--; buildQuestion();} else show("pageLogin"); };
+}
+
+function showResult(){
+  let html="";
+  user.answers.forEach((a,i)=>html+=`<p><strong>${i+1}. ${a}</strong> — ${meanings[a]||''}</p>`);
+  document.getElementById("resultContent").innerHTML=html;
+  show("pageResult");
+}
+
+function saveResult(){
+  const all=JSON.parse(localStorage.getItem("PAD_Data")||"[]");
+  all.push({name:`${user.fname} ${user.lname}`,email:user.email,a1:user.answers[0],a2:user.answers[1],a3:user.answers[2],date:new Date().toLocaleString()});
+  localStorage.setItem("PAD_Data",JSON.stringify(all));
+}
+
+document.getElementById("adminLink").onclick=()=>show("pageAdminLogin");
+document.getElementById("adminCancel").onclick=()=>show("pageResult");
+document.getElementById("adminSubmit").onclick=()=>{
+  const pass=document.getElementById("adminPass").value;
+  if(pass==="PAD2025"){loadAdmin(); show("pageAdminPanel");}
+  else alert("Wrong password!");
+};
+document.getElementById("adminExit").onclick=()=>show("pageResult");
+document.getElementById("clearBtn").onclick=()=>{
+  if(confirm("Clear all records?")){localStorage.removeItem("PAD_Data");loadAdmin();}
+};
+function loadAdmin(){
+  const data=JSON.parse(localStorage.getItem("PAD_Data")||"[]");
+  const tbl=document.getElementById("adminTable");
+  tbl.innerHTML="";
+  if(!data.length){tbl.innerHTML="<tr><td colspan='6' style='text-align:center;color:#ccc'>No records found</td></tr>";return;}
+  data.reverse().forEach(r=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td>${r.name}</td><td>${r.email}</td><td>${r.a1}</td><td>${r.a2}</td><td>${r.a3}</td><td>${r.date}</td>`;
+    tbl.appendChild(tr);
+  });
+}
+show("pageIntro");
+</script>
+</body>
+</html>
